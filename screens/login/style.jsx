@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {horizontalScale, verticalScale} from '../../Zassets/styles/scaling';
+import {horizontalScale, scaleFontSize, verticalScale} from '../../Zassets/styles/scaling';
 
 const style = StyleSheet.create({
   inputContainer: {
@@ -10,6 +10,16 @@ const style = StyleSheet.create({
   },
   registrationButton: {
     alignItems: 'center',
+  },
+  error: {
+    fontFamily: 'Inter-Regular',
+    fontSize: scaleFontSize(16),
+    color: 'red',
+  },
+  success: {
+    fontFamily: 'Inter-Regular',
+    fontSize: scaleFontSize(16),
+    color: '#28A745',
   },
 });
 

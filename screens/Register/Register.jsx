@@ -1,16 +1,23 @@
 import React, {useState} from 'react';
-import {Pressable, SafeAreaView, ScrollView, View} from 'react-native';
+import {SafeAreaView, ScrollView, View, Text, Alert} from 'react-native';
 import globalStyle from '../../Zassets/styles/globalStyle';
 import Input from '../../components/Input/Input';
 import style from './style';
 import Header from '../../components/header/Header';
 import Button from '../../components/Button/Button';
 import BackBtn from '../../components/BackBtn/BackBtn';
+import {createUser, loginUser} from '../../api/user';
+import {logIn} from '../../redux/reducers/User';
+import {useDispatch} from 'react-redux';
+import {Routes} from '../../navigation/routes';
 
 const Register = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={[globalStyle.backGroundColor, globalStyle.flex]}>
@@ -38,7 +45,28 @@ const Register = ({navigation}) => {
           placeholder={'******'}
           onChangeText={val => setPassword(val)}
         />
-        <Button title={'Register'} />
+        <View>
+          {error.length > 0 && <Text style={style.error}>{error}</Text>}
+          {success.length > 0 && <Text style={style.success}>{success}</Text>}
+        </View>
+        <Button
+          isDisabled={
+            name.length <= 2 || email.length < 5 || password.length < 8
+          }
+          title={'Register'}
+          onPress={async () => {
+            let user = await createUser(name, email, password);
+            if (user.error) {
+              setError(user.error);
+            } else {
+              setError('');
+              setSuccess('you have succesfully registered');
+              let autoLogUser = await loginUser(email, password);
+              dispatch(logIn(autoLogUser.data));
+
+            }
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );
