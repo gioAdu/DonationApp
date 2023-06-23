@@ -7,6 +7,7 @@ import style from './style';
 import Badge from '../../components/Badge/Badge';
 import Header from '../../components/header/Header';
 import Button from '../../components/Button/Button';
+import {Routes} from '../../navigation/routes';
 
 const DonationItemPage = ({navigation, route}) => {
   const donationItemInfo = useSelector(state => state.donations.selectedItem);
@@ -23,7 +24,12 @@ const DonationItemPage = ({navigation, route}) => {
         <Text style={style.description}> {donationItemInfo.description} </Text>
       </ScrollView>
       <View style={style.button}>
-        <Button title={'Donate'} onPress={() => {}} />
+        <Button
+          title={'Donate'}
+          onPress={() => {
+            navigation.navigate(Routes.Payments);
+          }}
+        />
       </View>
     </SafeAreaView>
   );

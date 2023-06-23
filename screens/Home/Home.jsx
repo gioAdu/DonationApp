@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   Text,
   View,
-  StatusBar,
   ScrollView,
   Image,
   Pressable,
@@ -25,7 +24,6 @@ import {logout} from '../../api/user';
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
-
   const categories = useSelector(state => state.categories);
   const donations = useSelector(state => state.donations);
   const user = useSelector(state => state.user);

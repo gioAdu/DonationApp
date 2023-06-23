@@ -63,7 +63,6 @@ const Register = ({navigation}) => {
               setSuccess('you have succesfully registered');
               let autoLogUser = await loginUser(email, password);
               dispatch(logIn(autoLogUser.data));
-
             }
           }}
         />
