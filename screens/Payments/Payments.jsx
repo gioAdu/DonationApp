@@ -22,6 +22,7 @@ export const formatter = new Intl.NumberFormat(undefined, {
 
 const Payments = () => {
   const [showModal, setShowModal] = useState(false);
+  
   const handleResponse = data => {
     if (data.title === 'success') {
       setShowModal(false);
@@ -38,7 +39,6 @@ const Payments = () => {
     }
   };
   const donationItemInfo = useSelector(state => state.donations.selectedItem);
-  console.log(donationItemInfo);
   return (
     <SafeAreaView style={[globalStyle.flex, globalStyle.backGroundColor]}>
       <ScrollView contentContainerStyle={style.paymentContainer}>
