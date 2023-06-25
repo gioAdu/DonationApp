@@ -14,21 +14,23 @@ import style from './style';
 import {useSelector} from 'react-redux';
 import Button from '../../components/Button/Button';
 import WebView from 'react-native-webview';
+import { Routes } from '../../navigation/routes';
 
 export const formatter = new Intl.NumberFormat(undefined, {
   style: 'currency',
   currency: 'USD',
 });
 
-const Payments = () => {
+const Payments = ({navigation}) => {
   const [showModal, setShowModal] = useState(false);
-  
+
   const handleResponse = data => {
     if (data.title === 'success') {
       setShowModal(false);
       Alert.alert('Donation was successfull', undefined, undefined, {
         cancelable: true,
       });
+      navigation.navigate(Routes.Home)
     } else if (data.title === 'cancel') {
       setShowModal(false);
       Alert.alert('Donation was cancelled', undefined, undefined, {
