@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {SafeAreaView, ScrollView, Text, View, Modal} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  Modal,
+  Image,
+  Alert,
+} from 'react-native';
 import globalStyle from '../../Zassets/styles/globalStyle';
 import Header from '../../components/header/Header';
 import style from './style';
@@ -14,31 +22,40 @@ export const formatter = new Intl.NumberFormat(undefined, {
 
 const Payments = () => {
   const [showModal, setShowModal] = useState(false);
-  const [status, setstatus] = useState('Pending');
-
   const handleResponse = data => {
     if (data.title === 'success') {
       setShowModal(false);
-      setstatus('Complete');
+      Alert.alert('Donation was successfull', undefined, undefined, {
+        cancelable: true,
+      });
     } else if (data.title === 'cancel') {
       setShowModal(false);
-      setstatus('cancelled');
+      Alert.alert('Donation was cancelled', undefined, undefined, {
+        cancelable: true,
+      });
     } else {
       return;
     }
   };
   const donationItemInfo = useSelector(state => state.donations.selectedItem);
+  console.log(donationItemInfo);
   return (
     <SafeAreaView style={[globalStyle.flex, globalStyle.backGroundColor]}>
       <ScrollView contentContainerStyle={style.paymentContainer}>
-        <Header title={'Making Donation'} />
+        <View style={style.headerWrapper}>
+          <Header title={'Making Donation'} />
+        </View>
+        <Image source={{uri: donationItemInfo.image}} style={style.image} />
+        <View style={style.headerWrapper}>
+          <Header title={donationItemInfo.name} type={2} />
+        </View>
+        <View style={style.bottomBorder}></View>
         <Text style={style.donationAmount}>
           You are about to donate {formatter.format(donationItemInfo.price)}
         </Text>
-        <Text>Payment status {status}</Text>
         <Modal visible={showModal} onRequestClose={() => setShowModal(false)}>
           <WebView
-            source={{uri: 'http://localhost:3000'}}
+            source={{uri: 'http://localhost:3000/'}}
             style={{flex: 1}}
             onNavigationStateChange={data => handleResponse(data)}
             injectedJavaScript={`document.getElementById('price').value=${donationItemInfo.price};document.myForm.submit()`}
