@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, memo} from 'react';
 
 import {Pressable, Text} from 'react-native';
 import PropTypes from 'prop-types';
@@ -41,4 +41,4 @@ Tab.propTypes = {
   isInactive: PropTypes.bool,
 };
 
-export default Tab;
+export default memo(Tab);
