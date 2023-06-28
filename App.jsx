@@ -18,7 +18,6 @@ const App = () => {
           appState.current.match(/inactive|background/) &&
           nextState === 'active'
         ) {
-          console.log('appstate changed');
           await checkToken();
         }
         appState.current = nextState;

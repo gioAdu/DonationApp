@@ -24,7 +24,7 @@ export const formatter = new Intl.NumberFormat(undefined, {
 
 const Payments = ({navigation}) => {
   const API_URL =
-    'https://us-central1-donationpaymentkey.cloudfunctions.net/paypalPayment';
+    'https://us-central1-donationpaymentkey.cloudfunctions.net/paypalPayments';
 
   const [showModal, setShowModal] = useState(false);
   const handleResponse = data => {
@@ -33,6 +33,7 @@ const Payments = ({navigation}) => {
     } else {
       StatusBar.setBackgroundColor('white');
     }
+
     if (data.title === 'success') {
       setShowModal(false);
       Alert.alert('Donation was successfull', undefined, undefined, {
@@ -44,8 +45,20 @@ const Payments = ({navigation}) => {
       Alert.alert('Donation was cancelled', undefined, undefined, {
         cancelable: true,
       });
-    } else {
-      return;
+    }
+
+    console.log(1);
+    console.log(data);
+    if (data.title === 'Webpage not available' || '404 Page not found') {
+      Alert.alert(
+        'Webpage is not available try again later',
+        undefined,
+        undefined,
+        {
+          cancelable: true,
+        },
+      );
+      navigation.goBack();
     }
   };
   const donationItemInfo = useSelector(state => state.donations.selectedItem);
