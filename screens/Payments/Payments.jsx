@@ -24,10 +24,12 @@ export const formatter = new Intl.NumberFormat(undefined, {
 
 const Payments = ({navigation}) => {
   const API_URL =
-    'https://us-central1-donationpaymentkey.cloudfunctions.net/paypalPayments';
+    'https://us-central1-donationpaymentkey.cloudfunctions.net/paypalPayment';
 
   const [showModal, setShowModal] = useState(false);
+
   const handleResponse = data => {
+    console.log(data);
     if (data.title === 'Document') {
       StatusBar.setBackgroundColor('#595bd4');
     } else {
@@ -46,12 +48,12 @@ const Payments = ({navigation}) => {
         cancelable: true,
       });
     }
+  };
 
-    console.log(1);
-    console.log(data);
-    if (data.title === 'Webpage not available' || '404 Page not found') {
+  const errorHandler = error => {
+    if (error.description === 'net::ERR_INTERNET_DISCONNECTED') {
       Alert.alert(
-        'Webpage is not available try again later',
+        'Please check your internet connection',
         undefined,
         undefined,
         {
@@ -59,8 +61,14 @@ const Payments = ({navigation}) => {
         },
       );
       navigation.goBack();
+    } else if (error.statusCode === 404) {
+      Alert.alert('Page not found', undefined, undefined, {
+        cancelable: true,
+      });
+      navigation.goBack();
     }
   };
+
   const donationItemInfo = useSelector(state => state.donations.selectedItem);
 
   return (
@@ -78,7 +86,7 @@ const Payments = ({navigation}) => {
           You are about to donate {formatter.format(donationItemInfo.price)}
         </Text>
         <Modal visible={showModal} onRequestClose={() => setShowModal(false)}>
-          <StatusBar barStyle={'dark-content'} />
+          <StatusBar />
           <WebView
             source={{
               uri: API_URL,
@@ -88,6 +96,10 @@ const Payments = ({navigation}) => {
             injectedJavaScript={`document.getElementById('price').value=${(+donationItemInfo.price).toFixed(
               2,
             )};document.myForm.submit()`}
+            onHttpError={syntheticEvent => {
+              const {nativeEvent} = syntheticEvent;
+              errorHandler(nativeEvent);
+            }}
           />
         </Modal>
       </ScrollView>
